@@ -22,7 +22,7 @@ module OlzaApi
           result: 'success',
           repsonse: response,
           response_status: response.response_code,
-          msg: "All packages was accepted by Olza."
+          msg: "All packages was processed correctly."
         }
       else
         response.parse_errors
