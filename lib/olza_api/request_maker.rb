@@ -20,7 +20,7 @@ module OlzaApi
       if response.valid?
         {
           result: 'success',
-          repsonse: response,
+          response: response,
           response_status: response.response_code,
           msg: "All packages was processed correctly."
         }
