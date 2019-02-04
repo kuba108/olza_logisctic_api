@@ -1,13 +1,13 @@
 module OlzaApi
   class Request
 
-    attr_accessor :method, :url, :headers, :body
+    attr_accessor :method, :url, :header, :payload
 
-    def initialize(method, url, headers, body)
+    def initialize(method, url, header, payload)
       @method = method
       @url = url
-      @headers = headers
-      @body = body
+      @header = header
+      @payload = payload
     end
 
   end

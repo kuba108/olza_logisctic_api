@@ -9,11 +9,11 @@ module OlzaApi
       @api_laguage = api_language
     end
 
-    def send_post_request(url, body = nil)
-      request = Request.new(:post, url, build_header, body.to_json)
-      connection = create_connection(url, request.headers)
+    def send_post_request(url, payload = nil)
+      request = Request.new(:post, url, build_header, payload.to_json)
+      connection = create_connection(url, request.header)
       raw_response  = connection.post do |req|
-        req.body = request.body
+        req.body = request.payload
       end
 
       response.build_response(raw_response)

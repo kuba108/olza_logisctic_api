@@ -14,33 +14,33 @@ module OlzaApi
     # creates shipment in Olza system.
     def create_shipments(data)
       endpoint_url = "#{@api_url}/createShipments"
-      body = data
+      payload = data
       RequestMaker.new(@api_user, @api_pwd, @language).
-          send_post_request(endpoint_url, body)
+          send_post_request(endpoint_url, payload)
     end
 
     # post shipments created in Olza system into spedition system
     def post_shipments(data)
       endpoint_url = "#{@api_url}/postShipments"
-      body = data
+      payload = data
       RequestMaker.new(@api_user, @api_pwd, @language).
-          send_post_request(endpoint_url, body)
+          send_post_request(endpoint_url, payload)
     end
 
     # returns shipment labels as pdf
     def get_labels(data)
       endpoint_url = "#{@api_url}/getLabels"
-      body = data
+      payload = data
       RequestMaker.new(@api_user, @api_pwd, @language).
-          send_post_request(endpoint_url, body)
+          send_post_request(endpoint_url, payload)
     end
 
     # returns statuses of actual packages
     def get_statuses(data)
       endpoint_url = "#{@api_url}/getStatuses"
-      body = data
+      payload = data
       RequestMaker.new(@api_user, @api_pwd, @language).
-          send_post_request(endpoint_url, body)
+          send_post_request(endpoint_url, payload)
     end
   end
 end
