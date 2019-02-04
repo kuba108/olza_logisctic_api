@@ -10,13 +10,13 @@ module OlzaApi
     end
 
     def send_post_request(url, payload = nil)
-      request = Request.new(:post, url, build_header, payload.to_json)
+      request = Request.new(:post, url, build_data(payload).to_json)
       connection = create_connection(url, request.header)
       raw_response  = connection.post do |req|
         req.body = request.payload
       end
 
-      response.build_response(raw_response)
+      response = build_response(raw_response)
       if response.valid?
         {
           result: 'success',
@@ -31,21 +31,23 @@ module OlzaApi
             response: response,
             response_status: response.response_code,
             errors: response.errors,
-            msg: "Response from Olza was not successful."
+            msg: "Some errors during processing occured."
         }
       end
     end
     private
 
-    # using cs as default language. Uasble are cs and pl case sensitive
+
     def build_header
-      apiLanguage = :api_laguage ? :api_laguage : "cs"
-      {
-        'apiUser': "#{:api_user}",
-        'apiPassword': "#{:api_pwd}",
-        'language': "#{apiLanguage}",
-        'Content-Type': 'application/json'
-      }
+      {header:{apiUser: @api_user,
+       apiPassword: @api_pwd,
+      language: @api_laguage}}
+    end
+
+    def build_data(data)
+      header = build_header
+      full_data = header.merge(data)
+      return full_data
     end
 
     def create_connection(url, header)

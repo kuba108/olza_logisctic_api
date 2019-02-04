@@ -11,21 +11,22 @@ module OlzaApi
       @http_status = http_status
       if @http_status == 200
         @body = parse_body(body)
+        parse_errors
       else
         @body = nil
       end
     end
 
     def response_code
-      @body['status']['responseCode'].to_i if @body.present?
+      @body['status']['responseCode'].to_i if @body
     end
 
     def response_message
-      @body['status']['responseDescription'] if @body.present?
+      @body['status']['responseDescription'] if @body
     end
 
     def valid?
-      if response_code == 0
+      if response_code == 0 && !errors.any?
         true
       else
         false

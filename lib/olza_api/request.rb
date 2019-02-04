@@ -3,10 +3,9 @@ module OlzaApi
 
     attr_accessor :method, :url, :header, :payload
 
-    def initialize(method, url, header, payload)
+    def initialize(method, url,  payload)
       @method = method
       @url = url
-      @header = header
       @payload = payload
     end
 
