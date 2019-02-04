@@ -6,7 +6,6 @@ class OlzaApiTest < Minitest::Test
   end
 
   def test_connection
-
     test_url = "https://test.panel.olzalogistic.com/api/v1"
     test_login = 'api_mixit'
     test_pwd = 'uKcFxtvmHA2X'

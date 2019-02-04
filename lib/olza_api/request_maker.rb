@@ -11,7 +11,7 @@ module OlzaApi
 
     def send_post_request(url, payload = nil)
       request = Request.new(:post, url, build_data(payload).to_json)
-      connection = create_connection(url, request.header)
+      connection = create_connection(url)
       raw_response  = connection.post do |req|
         req.body = request.payload
       end
@@ -31,27 +31,28 @@ module OlzaApi
             response: response,
             response_status: response.response_code,
             errors: response.errors,
-            msg: "Some errors during processing occured."
+            msg: "Some errors during processing occured. Check response Hash"
         }
       end
     end
     private
 
-
+    # prepare header into JSON with given credentials
     def build_header
       {header:{apiUser: @api_user,
        apiPassword: @api_pwd,
       language: @api_laguage}}
     end
 
+    #merge header and provided data hashes
     def build_data(data)
       header = build_header
       full_data = header.merge(data)
       return full_data
     end
 
-    def create_connection(url, header)
-      Faraday.new(url: url, headers: header) do |conn|
+    def create_connection(url)
+      Faraday.new(url: url) do |conn|
         conn.request :json
         conn.response :logger
         conn.adapter Faraday.default_adapter
