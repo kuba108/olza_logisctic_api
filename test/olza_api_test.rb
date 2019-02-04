@@ -11,6 +11,7 @@ class OlzaApiTest < Minitest::Test
     test_login = 'api_mixit'
     test_pwd = 'uKcFxtvmHA2X'
     test_language = 'cs'
+    #used test data from api guide.
     test_data = {
           payload:
         [
@@ -73,6 +74,9 @@ class OlzaApiTest < Minitest::Test
     client = ::OlzaApi::Client.new(test_login, test_pwd, test_url, test_language)
     response = client.create_shipments(test_data)
 
+    #provided correct data, no error should occure
+    assert_empty response[:response].errors
+    #response variable is after JSON parse, should be Hash
     assert_instance_of Hash, response
   end
 
