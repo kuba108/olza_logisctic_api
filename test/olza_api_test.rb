@@ -5,13 +5,13 @@ class OlzaApiTest < Minitest::Test
     refute_nil ::OlzaApi::VERSION
   end
 
-  def test_connection
+  #test creates new shipments in Olza test panel based on test data!
+  def test_create_shipment
     test_url = "https://test.panel.olzalogistic.com/api/v1"
     test_login = 'api_mixit'
     test_pwd = 'uKcFxtvmHA2X'
     test_language = 'cs'
     test_data = {
-
           payload:
         [
         {
@@ -72,6 +72,19 @@ class OlzaApiTest < Minitest::Test
     }
     client = ::OlzaApi::Client.new(test_login, test_pwd, test_url, test_language)
     response = client.create_shipments(test_data)
+
+    assert_instance_of Hash, response
+  end
+
+  def test_get_statuses
+    test_url = "https://test.panel.olzalogistic.com/api/v1"
+    test_login = 'api_mixit'
+    test_pwd = 'uKcFxtvmHA2X'
+    test_language = 'cs'
+    data = {payload:{shipmentList:[12884]}}
+
+    client = ::OlzaApi::Client.new(test_login, test_pwd, test_url, test_language)
+    response = client.get_statuses(data)
 
     assert_instance_of Hash, response
   end
