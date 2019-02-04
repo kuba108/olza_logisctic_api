@@ -26,11 +26,7 @@ module OlzaApi
     end
 
     def valid?
-      if response_code == 0 && !errors.any?
-        true
-      else
-        false
-      end
+      response_code == 0 && !errors.any?
     end
 
     def parse_errors

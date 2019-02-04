@@ -39,9 +39,13 @@ module OlzaApi
 
     # prepare header into JSON with given credentials
     def build_header
-      {header:{apiUser: @api_user,
-       apiPassword: @api_pwd,
-      language: @api_laguage}}
+      {
+          header:{
+              apiUser: @api_user,
+              apiPassword: @api_pwd,
+              language: @api_laguage
+          }
+      }
     end
 
     #merge header and provided data hashes
