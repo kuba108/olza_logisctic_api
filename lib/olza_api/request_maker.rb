@@ -23,6 +23,7 @@ module OlzaApi
           processed_packages: response.processedShipments,
           response_status: response.response_code,
           pdf: response.labels_pdf,
+          errors: response.errors,
           msg: "All packages was processed correctly."
         }
       else
@@ -30,12 +31,13 @@ module OlzaApi
         response.parse_errors
         {
             result: 'error',
-            response_status: response.response_code,
             processed_packages: response.processedShipments,
-            errors: response.errors,
+            response_status: response.response_code,
             pdf: response.labels_pdf,
-            msg: "Some errors during processing occured.",
-            body: response
+            errors: response.errors,
+            msg: "Some errors during processing occured."
+            # Uncomment next line if you need more information about response errors.
+            #body: response
         }
       end
     end
@@ -74,7 +76,5 @@ module OlzaApi
         Response.new(raw_response.status, raw_response.body)
       end
     end
-
-
   end
 end

@@ -1,4 +1,5 @@
 require 'json'
+require 'base64'
 
 module OlzaApi
   class Response
@@ -52,7 +53,7 @@ module OlzaApi
     #returns temp pdf file with labels
     def get_labels_pdf(parsed_body)
       if parsed_body['response']['data_stream']
-        pdf = Tempfile.new('labels.pdf', '.pdf')
+        pdf = Tempfile.new('labels.pdf')
         File.open(pdf.path.to_s, 'wb') do |f|
           f.write(Base64.decode64(parsed_body['response']['data_stream']))
         end
