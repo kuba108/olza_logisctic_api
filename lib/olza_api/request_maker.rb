@@ -30,8 +30,8 @@ module OlzaApi
         response.parse_errors
         {
             result: 'error',
-            processed_packages: response.processedShipments,
             response_status: response.response_code,
+            processed_packages: response.processedShipments,
             errors: response.errors,
             pdf: response.labels_pdf,
             msg: "Some errors during processing occured.",
