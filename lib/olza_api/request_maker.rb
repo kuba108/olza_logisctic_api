@@ -20,18 +20,22 @@ module OlzaApi
       if response.valid?
         {
           result: 'success',
-          response: response,
+          processed_packages: response.processedShipments,
           response_status: response.response_code,
+          pdf: response.labels_pdf,
           msg: "All packages was processed correctly."
         }
       else
+        #in case of errors, also full body of response would be returned for debugging
         response.parse_errors
         {
             result: 'error',
-            response: response,
+            processed_packages: response.processedShipments,
             response_status: response.response_code,
             errors: response.errors,
-            msg: "Some errors during processing occured. Check response Hash"
+            pdf: response.labels_pdf,
+            msg: "Some errors during processing occured.",
+            body: response
         }
       end
     end
