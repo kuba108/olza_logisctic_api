@@ -42,5 +42,6 @@ module OlzaApi
       RequestMaker.new(@api_user, @api_pwd, @language).
           send_post_request(endpoint_url, payload)
     end
+
   end
 end

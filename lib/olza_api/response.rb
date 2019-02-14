@@ -4,17 +4,17 @@ require 'base64'
 module OlzaApi
   class Response
 
-    attr_accessor :http_status, :errors, :processedShipments , :body, :labels_pdf
+    attr_accessor :http_status, :errors, :processed_shipments , :body, :labels_pdf
 
     # response is not suitable for processing if http_status is not 200
     def initialize(http_status, body = nil, labels_pdf = nil)
       @errors = []
-      @processedShipments = []
+      @processed_shipments = []
       @http_status = http_status
       if @http_status == 200
         @body = parse_body(body)
         parse_errors
-        @processedShipments = parse_processed_shipments(@body)
+        @processed_shipments = parse_processed_shipments(@body)
         @labels_pdf = get_labels_pdf(@body)
       else
         @body = nil
@@ -41,8 +41,8 @@ module OlzaApi
     def parse_processed_shipments(parsed_body)
       shipments = []
       if parsed_body['response']['list_processed'].any?
-        processedRequests = parsed_body['response']['list_processed']
-        processedRequests.each do |shipment|
+        processed_requests = parsed_body['response']['list_processed']
+        processed_requests.each do |shipment|
           shipments << shipment
         end
       end
@@ -57,11 +57,11 @@ module OlzaApi
         File.open(pdf.path.to_s, 'wb') do |f|
           f.write(Base64.decode64(parsed_body['response']['data_stream']))
         end
-
         pdf
       end
 
     end
+
     private
 
     def parse_body(body)
@@ -69,5 +69,6 @@ module OlzaApi
     rescue
       ""
     end
+
   end
 end

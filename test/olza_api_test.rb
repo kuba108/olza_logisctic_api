@@ -1,6 +1,7 @@
 require "test_helper"
 
 class OlzaApiTest < Minitest::Test
+
   def test_that_it_has_a_version_number
     refute_nil ::OlzaApi::VERSION
   end
@@ -14,60 +15,59 @@ class OlzaApiTest < Minitest::Test
 
     # for better understanding of data format, check olza logistic panel and olza api guides
     test_data = {
-          payload:
-        [
+      payload: [
         {
-            apiCustomRef: "Test1",
-            preset: {
-                senderCountry: "pl",
-                recipientCountry: "pl",
-                speditionCode: "GLS",
-                shipmentType: "WAREHOUSE",
-                senderId: ""
-            },
-            sender: {
-                senderName: "Name",
-                senderAddress: "Street 2",
-                senderCity: "City",
-                senderZipcode: "12345",
-                senderContactPerson: "Someone",
-                senderEmail: "mail@mail.xx",
-                senderPhone: "+41123456789"
-            },
-            recipient: {
-                recipientFirstname: "FName",
-                recipientSurname: "Lname",
-                recipientAddress: "Street 1",
-                recipientCity: "City",
-                recipientZipcode: "12345",
-                recipientContactPerson: "company",
-                recipientEmail: "test@test.pl",
-                recipientPhone: "+48123456789",
-                pickupPlaceId: ""
-            },
-            services: {
-                T12: false,
-                XS: false,
-                S12: true,
-                S10: false,
-                SAT: false,
-                PALLET: false,
-                CSP: false,
-                SM2: "+48123456789",
-                INS: 0
-            },
+          apiCustomRef: "Test1",
+          preset: {
+            senderCountry: "pl",
+            recipientCountry: "pl",
+            speditionCode: "GLS",
+            shipmentType: "WAREHOUSE",
+            senderId: ""
+          },
+          sender: {
+            senderName: "Name",
+            senderAddress: "Street 2",
+            senderCity: "City",
+            senderZipcode: "12345",
+            senderContactPerson: "Someone",
+            senderEmail: "mail@mail.xx",
+            senderPhone: "+41123456789"
+          },
+          recipient: {
+            recipientFirstname: "FName",
+            recipientSurname: "Lname",
+            recipientAddress: "Street 1",
+            recipientCity: "City",
+            recipientZipcode: "12345",
+            recipientContactPerson: "company",
+            recipientEmail: "test@test.pl",
+            recipientPhone: "+48123456789",
+            pickupPlaceId: ""
+          },
+          services: {
+            T12: false,
+            XS: false,
+            S12: true,
+            S10: false,
+            SAT: false,
+            PALLET: false,
+            CSP: false,
+            SM2: "+48123456789",
+            INS: 0
+          },
 
-            packages: {
-                packageCount: 1,
-                weight: 1,
-                shipmentDescription: "description"
-            },
-            specific: {
-                pick: true,
-                shipmentPickupDate: ""
-            }
+          packages: {
+            packageCount: 1,
+            weight: 1,
+            shipmentDescription: "description"
+          },
+          specific: {
+            pick: true,
+            shipmentPickupDate: ""
+          }
         }
-    ]
+      ]
     }
     client = ::OlzaApi::Client.new(test_login, test_pwd, test_url, test_language)
     response = client.create_shipments(test_data)
