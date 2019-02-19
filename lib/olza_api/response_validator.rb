@@ -9,8 +9,8 @@ module OlzaApi
           errors << package
         end
       end
-
       errors
     end
+
   end
 end
