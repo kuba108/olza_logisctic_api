@@ -39,11 +39,11 @@ module OlzaApi
 
     #creates array hash of processed shipments in each request.
     def parse_processed_shipments(parsed_body)
-      shipments = []
+      shipments = {}
       if parsed_body['response']['list_processed'].any?
         processed_requests = parsed_body['response']['list_processed']
-        processed_requests.each do |shipment|
-          shipments << shipment
+        processed_requests.each do |key, value|
+          shipments[key] = value
         end
       end
 
