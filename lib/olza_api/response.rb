@@ -1,6 +1,5 @@
 require 'json'
 require 'base64'
-require_relative 'Errors/http_status_error'
 
 module OlzaApi
   class Response
