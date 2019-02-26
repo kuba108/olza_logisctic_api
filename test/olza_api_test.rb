@@ -9,73 +9,123 @@ class OlzaApiTest < Minitest::Test
   #test creates new shipments in Olza test panel based on test data!
   def test_create_shipment
     test_url = "https://test.panel.olzalogistic.com/api/v1"
-    test_login = 'your test login'
-    test_pwd = 'your test password'
+    test_login = 'your test api login'
+    test_pwd = 'your test api password'
     test_language = 'cs'
 
     # for better understanding of data format, check olza logistic panel and olza api guides
     test_data = {
       payload: [
         {
-          apiCustomRef: "Test1",
-          preset: {
-            senderCountry: "pl",
-            recipientCountry: "pl",
-            speditionCode: "GLS",
-            shipmentType: "WAREHOUSE",
-            senderId: ""
-          },
-          sender: {
-            senderName: "Name",
-            senderAddress: "Street 2",
-            senderCity: "City",
-            senderZipcode: "12345",
-            senderContactPerson: "Someone",
-            senderEmail: "mail@mail.xx",
-            senderPhone: "+41123456789"
-          },
-          recipient: {
-            recipientFirstname: "FName",
-            recipientSurname: "Lname",
-            recipientAddress: "Street 1",
-            recipientCity: "City",
-            recipientZipcode: "12345",
-            recipientContactPerson: "company",
-            recipientEmail: "test@test.pl",
-            recipientPhone: "+48123456789",
-            pickupPlaceId: ""
-          },
-          services: {
-            T12: false,
-            XS: false,
-            S12: true,
-            S10: false,
-            SAT: false,
-            PALLET: false,
-            CSP: false,
-            SM2: "+48123456789",
-            INS: 0
-          },
+            apiCustomRef: "Test11",
+            preset: {
+                senderCountry: "pl",
+                recipientCountry: "pl",
+                speditionCode: "GLS",
+                shipmentType: "DIRECT",
+                senderId: ""
+            },
+            sender: {
+                senderName: "Name",
+                senderAddress: "Street 2",
+                senderCity: "City",
+                senderZipcode: "12345",
+                senderContactPerson: "Someone",
+                senderEmail: "mail@mail.xx",
+                senderPhone: "+41123456789"
+            },
+            recipient: {
+                recipientFirstname: "FName",
+                recipientSurname: "Lname",
+                recipientAddress: "Street 1",
+                recipientCity: "City",
+                recipientZipcode: "12345",
+                recipientContactPerson: "company",
+                recipientEmail: "test@test.pl",
+                recipientPhone: "+48123456789",
+                pickupPlaceId: ""
+            },
+            services: {
+                T12: false,
+                XS: false,
+                S12: true,
+                S10: false,
+                SAT: false,
+                PALLET: false,
+                CSP: false,
+                SM2: "+48123456789",
+                INS: 0
+            },
 
-          packages: {
-            packageCount: 1,
-            weight: 1,
-            shipmentDescription: "description"
-          },
-          specific: {
-            pick: true,
-            shipmentPickupDate: ""
-          }
+            packages: {
+                packageCount: 1,
+                weight: 1,
+                shipmentDescription: "description"
+            },
+            specific: {
+                pick: true,
+                shipmentPickupDate: ""
+            }
+        },
+        {
+            apiCustomRef: "Test1",
+            preset: {
+                senderCountry: "pl",
+                recipientCountry: "pl",
+                speditionCode: "GLS",
+                shipmentType: "WAREHOUSE",
+                senderId: ""
+            },
+            sender: {
+                senderName: "Name",
+                senderAddress: "Street 2",
+                senderCity: "City",
+                senderZipcode: "12345",
+                senderContactPerson: "Someone",
+                senderEmail: "mail@mail.xx",
+                senderPhone: "+41123456789"
+            },
+            recipient: {
+                recipientFirstname: "FName",
+                recipientSurname: "Lname",
+                recipientAddress: "Street 1",
+                recipientCity: "City",
+                recipientZipcode: "12345",
+                recipientContactPerson: "company",
+                recipientEmail: "test@test.pl",
+                recipientPhone: "+48123456789",
+                pickupPlaceId: ""
+            },
+            services: {
+                T12: false,
+                XS: false,
+                S12: true,
+                S10: false,
+                SAT: false,
+                PALLET: false,
+                CSP: false,
+                SM2: "+48123456789",
+                INS: 0
+            },
+
+            packages: {
+                packageCount: 1,
+                weight: 1,
+                shipmentDescription: "description"
+            },
+            specific: {
+                pick: true,
+                shipmentPickupDate: ""
+            }
         }
       ]
     }
-    client = ::OlzaApi::Client.new(test_login, test_pwd, test_url, test_language)
-    response = client.create_shipments(test_data)
+    client = OlzaApi::Client.new(test_login, test_pwd, test_url, test_language)
+    response = client.create(test_data)
 
-    # assertion should pass if test data are relevant
-    assert_nil response['errors']
-    #response variable is after JSON parse, should be Hash
-    assert_instance_of Hash, response
+
+    assert_equal 1, response.error_list.size
+    assert_instance_of OlzaApi::Response, response
   end
 
   def test_get_statuses
@@ -86,7 +136,7 @@ class OlzaApiTest < Minitest::Test
 
     data = {payload:{shipmentList:[123456]}}
 
-    client = ::OlzaApi::Client.new(test_login, test_pwd, test_url, test_language)
+    client = OlzaApi::Client.new(test_login, test_pwd, test_url, test_language)
     response = client.get_statuses(data)
 
     assert_instance_of Hash, response
@@ -100,10 +150,10 @@ class OlzaApiTest < Minitest::Test
     test_pwd = 'your test password'
     test_language = 'cs'
 
-    data = {payload:{shipmentList:[123456]}}
+    data = {payload: {shipmentList: [123456]}} #use real Shipment ID
 
-    client = ::OlzaApi::Client.new(test_login, test_pwd, test_url, test_language)
-    response = client.post_shipments(data)
+    client = OlzaApi::Client.new(test_login, test_pwd, test_url, test_language)
+    response = client.post(data)
 
     assert_instance_of Hash, response
   end
@@ -115,9 +165,9 @@ class OlzaApiTest < Minitest::Test
     test_pwd = 'your test password'
     test_language = 'cs'
 
-    data = {payload:{shipmentList:[123456]}}
+    data = {payload: {shipmentList: [123456]}} # use real Shipment ID
 
-    client = ::OlzaApi::Client.new(test_login, test_pwd, test_url, test_language)
+    client = OlzaApi::Client.new(test_login, test_pwd, test_url, test_language)
     response = client.get_labels(data)
 
     assert_instance_of Hash, response
