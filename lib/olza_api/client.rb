@@ -12,7 +12,7 @@ module OlzaApi
     end
 
     # creates shipment in Olza system.
-    def create_shipments(data)
+    def create(data)
       endpoint_url = "#{@api_url}/createShipments"
       payload = data
       RequestMaker.new(@api_user, @api_pwd, @language).
@@ -20,7 +20,7 @@ module OlzaApi
     end
 
     # post shipments created in Olza system into spedition system
-    def post_shipments(data)
+    def post(data)
       endpoint_url = "#{@api_url}/postShipments"
       payload = data
       RequestMaker.new(@api_user, @api_pwd, @language).

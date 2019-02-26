@@ -1,3 +1,5 @@
+require_relative 'Errors/api_error'
+
 module OlzaApi
   class RequestMaker
 
@@ -17,29 +19,45 @@ module OlzaApi
       end
 
       response = build_response(raw_response)
+
       if response.valid?
-        {
-          result: 'success',
-          processed_packages: response.processed_shipments,
-          response_status: response.response_code,
-          pdf: response.labels_pdf,
-          errors: response.errors,
-          msg: "All packages was processed correctly."
-          #body: response
-        }
-      else
-        #in case of errors, also full body of response would be returned for debugging
-        response.parse_errors
-        {
-          result: 'error',
-          processed_packages: response.processed_shipments,
-          response_status: response.response_code,
-          pdf: response.labels_pdf,
-          errors: response.errors,
-          msg: "Some errors during processing occured.",
-          # Uncomment next line if you need more information about response errors.
-          body: response
-        }
+        if response.errors?
+          if response.get_labels_pdf != nil
+            {
+                result: 'error',
+                msg: "Errors in sihpments occured.",
+                processed_list: response.processed_list,
+                error_list: response.error_list,
+                pdf: response.get_labels_pdf,
+                body: response
+            }
+          else
+            {
+                result: 'error',
+                msg: "Erorrs in shipments occured.",
+                processed_list: response.processed_list,
+                error_list: response.error_list,
+                body: response
+            }
+          end
+        else
+          if response.get_labels_pdf != nil
+            {
+                result: 'success',
+                processed_list: response.processed_list,
+                msg: "All packages was processed correctly.",
+                pdf: response.get_labels_pdf,
+                body: response
+            }
+          else
+            {
+                result: 'success',
+                processed_list: response.processed_list,
+                msg: "All packages was processed correctly.",
+                body: response
+            }
+          end
+        end
       end
     end
 
@@ -56,13 +74,11 @@ module OlzaApi
       }
     end
 
-    # Merges header and provided data hashes.
     def build_data(data)
       header = build_header
       header.merge(data)
     end
 
-    # Creates connection.
     def create_connection(url)
       Faraday.new(url: url) do |conn|
         conn.request :json
@@ -71,7 +87,6 @@ module OlzaApi
       end
     end
 
-    # Builds response from raw HTTP response.
     def build_response(raw_response, ignore_body = false)
       if ignore_body
         Response.new(raw_response.status)
