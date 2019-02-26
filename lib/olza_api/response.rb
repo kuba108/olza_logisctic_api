@@ -6,7 +6,6 @@ module OlzaApi
 
     attr_reader :http_status
 
-    # response is not suitable for processing if http_status is not 200
     def initialize(http_status, body = nil)
       @body = parse_body(body)
     end
