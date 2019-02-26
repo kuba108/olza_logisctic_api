@@ -4,7 +4,6 @@ require 'base64'
 module OlzaApi
   class Response
 
-    attr_accessor :message
     attr_reader :http_status
 
     # response is not suitable for processing if http_status is not 200
@@ -28,13 +27,12 @@ module OlzaApi
       @body['response']['list_processed'] if @body
     end
 
-    def message
+    def result
       if has_errors?
-        @message = "Some errors in shipment processing occured"
+        "error"
       else
-        @message = "All shipments were processed"
+        "success"
       end
-
     end
 
     # Returns temp pdf file with labels
