@@ -1,5 +1,3 @@
-require_relative 'Errors/api_error'
-
 module OlzaApi
   class RequestMaker
 
@@ -21,43 +19,7 @@ module OlzaApi
       response = build_response(raw_response)
 
       if response.valid?
-        if response.errors?
-          if response.get_labels_pdf != nil
-            {
-                result: 'error',
-                msg: "Errors in sihpments occured.",
-                processed_list: response.processed_list,
-                error_list: response.error_list,
-                pdf: response.get_labels_pdf,
-                body: response
-            }
-          else
-            {
-                result: 'error',
-                msg: "Erorrs in shipments occured.",
-                processed_list: response.processed_list,
-                error_list: response.error_list,
-                body: response
-            }
-          end
-        else
-          if response.get_labels_pdf != nil
-            {
-                result: 'success',
-                processed_list: response.processed_list,
-                msg: "All packages was processed correctly.",
-                pdf: response.get_labels_pdf,
-                body: response
-            }
-          else
-            {
-                result: 'success',
-                processed_list: response.processed_list,
-                msg: "All packages was processed correctly.",
-                body: response
-            }
-          end
-        end
+        response
       end
     end
 
@@ -74,6 +36,7 @@ module OlzaApi
       }
     end
 
+    # Merges header and provided data hashes.
     def build_data(data)
       header = build_header
       header.merge(data)
@@ -88,6 +51,8 @@ module OlzaApi
     end
 
     def build_response(raw_response, ignore_body = false)
+      raise HttpStatusError.new(raw_response, "Http status is #{raw_response.status}") if raw_response.status != 200
+
       if ignore_body
         Response.new(raw_response.status)
       else

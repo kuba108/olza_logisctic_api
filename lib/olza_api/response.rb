@@ -5,23 +5,19 @@ require_relative 'Errors/http_status_error'
 module OlzaApi
   class Response
 
-    attr_accessor :http_status, :error_list, :processed_list, :body, :labels_pdf
+    attr_accessor :message
+    attr_reader :http_status
 
     # response is not suitable for processing if http_status is not 200
     def initialize(http_status, body = nil)
-      @http_status = http_status
-      if @http_status == 200
-        @body = parse_body(body)
-      else
-        raise HttpStatusError.new(body, "Http status is #{@http_status}")
-      end
+      @body = parse_body(body)
     end
 
     def response_code
       @body['status']['responseCode'].to_i if @body
     end
 
-    def response_message
+    def response_description
       @body['status']['responseDescription'] if @body
     end
 
@@ -33,14 +29,25 @@ module OlzaApi
       @body['response']['list_processed'] if @body
     end
 
+    def message
+      if has_errors?
+        @message = "Some errors in shipment processing occured"
+      else
+        @message = "All shipments were processed"
+      end
+
+    end
+
     # Returns temp pdf file with labels
     def get_labels_pdf
       if @body['response']['data_stream']
         pdf = Tempfile.new('labels.pdf')
         File.open(pdf.path.to_s, 'wb') do |f|
-          f.write(Base64.decode64(parsed_body['response']['data_stream']))
+          f.write(Base64.decode64(@body['response']['data_stream']))
         end
         pdf
+      else
+        raise PdfDataStreamError.new("No data stream included in response.")
       end
     end
 
@@ -49,7 +56,7 @@ module OlzaApi
       validator.validate_response(@body)
     end
 
-    def errors?
+    def has_errors?
       error_list.any?
     end
 
