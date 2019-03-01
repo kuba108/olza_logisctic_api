@@ -3,19 +3,19 @@ module OlzaApi
 
     def validate_response(response_body)
 
-      if !response_body['status'].is_a?(Hash)
+      unless response_body['status'].is_a?(Hash)
         raise ResponseError.new('Malformed status')
       end
 
-      if !response_body['status']['responseCode']
+      unless response_body['status']['responseCode']
         raise ResponseError.new('Malformed response code')
       end
 
-      if !response_body['status']['responseDescription']
+      unless response_body['status']['responseDescription']
         raise ResponseError.new('Malformed response description')
       end
 
-      if !response_body['response'].any?
+      unless response_body['response'].any?
         raise ResponseError.new('Malformed response payload')
       end
 
