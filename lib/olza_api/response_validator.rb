@@ -1,16 +1,38 @@
 module OlzaApi
   class ResponseValidator
 
-    def validate_response(response)
-      errors = []
-      if response.body['response']['list_error'].any?
-        error_packages = response.body['response']['list_error']
-        error_packages.each do |package|
-          errors << package
-        end
-      end
-      errors
-    end
+    def validate_response(response_body)
 
+      if !response_body['status'].is_a?(Hash)
+        raise ResponseError.new('Malformed status')
+      end
+
+      if !response_body['status']['responseCode']
+        raise ResponseError.new('Malformed response code')
+      end
+
+      if !response_body['status']['responseDescription']
+        raise ResponseError.new('Malformed response description')
+      end
+
+      if !response_body['response'].any?
+        raise ResponseError.new('Malformed response payload')
+      end
+
+      if response_body['status']['responseCode'] == 900
+        raise ValidationError.new(ApiError.create_message_from_api_status(response_body['status']))
+      end
+
+      if response_body['status']['responseCode'] == 901
+        raise SpeditionError.new(ApiError.create_message_from_api_status(response_body['status']))
+      end
+
+      if response_body['status']['responseCode'] != 0
+        raise ProcessingError.new(ApiError.create_message_from_api_status(response_body['status']))
+      end
+
+      true
+
+    end
   end
 end

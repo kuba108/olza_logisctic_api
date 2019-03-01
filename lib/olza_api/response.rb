@@ -4,62 +4,56 @@ require 'base64'
 module OlzaApi
   class Response
 
-    attr_accessor :http_status, :errors, :processed_shipments , :body, :labels_pdf
+    attr_reader :http_status
 
-    # response is not suitable for processing if http_status is not 200
-    def initialize(http_status, body = nil, labels_pdf = nil)
-      @errors = []
-      @processed_shipments = []
-      @http_status = http_status
-      if @http_status == 200
-        @body = parse_body(body)
-        parse_errors
-        @processed_shipments = parse_processed_shipments(@body)
-        @labels_pdf = get_labels_pdf(@body)
-      else
-        @body = nil
-      end
+    def initialize(http_status, body = nil)
+      @body = parse_body(body)
     end
 
     def response_code
       @body['status']['responseCode'].to_i if @body
     end
 
-    def response_message
+    def response_description
       @body['status']['responseDescription'] if @body
     end
 
-    def valid?
-      response_code == 0 && !errors.any?
+    def error_list
+      @body['response']['list_error'] if @body
     end
 
-    def parse_errors
-      @errors = ResponseValidator.new.validate_response(self)
+    def processed_list
+      @body['response']['list_processed'] if @body
     end
 
-    #creates array hash of processed shipments in each request.
-    def parse_processed_shipments(parsed_body)
-      shipments = []
-      if parsed_body['response']['list_processed'].any?
-        processed_requests = parsed_body['response']['list_processed']
-        processed_requests.each do |shipment|
-          shipments << shipment
-        end
+    def result
+      if has_errors?
+        "error"
+      else
+        "success"
       end
-
-      shipments
     end
 
-    #returns temp pdf file with labels
-    def get_labels_pdf(parsed_body)
-      if parsed_body['response']['data_stream']
+    # Returns temp pdf file with labels
+    def get_labels_pdf
+      if @body['response']['data_stream']
         pdf = Tempfile.new('labels.pdf')
         File.open(pdf.path.to_s, 'wb') do |f|
-          f.write(Base64.decode64(parsed_body['response']['data_stream']))
+          f.write(Base64.decode64(@body['response']['data_stream']))
         end
         pdf
+      else
+        raise PdfDataStreamError.new("No data stream included in response.")
       end
+    end
 
+    def valid?
+      validator = ResponseValidator.new()
+      validator.validate_response(@body)
+    end
+
+    def has_errors?
+      error_list.any?
     end
 
     private

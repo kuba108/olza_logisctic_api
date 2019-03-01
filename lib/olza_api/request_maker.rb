@@ -17,28 +17,9 @@ module OlzaApi
       end
 
       response = build_response(raw_response)
+
       if response.valid?
-        {
-          result: 'success',
-          processed_packages: response.processedShipments,
-          response_status: response.response_code,
-          pdf: response.labels_pdf,
-          errors: response.errors,
-          msg: "All packages was processed correctly."
-        }
-      else
-        #in case of errors, also full body of response would be returned for debugging
-        response.parse_errors
-        {
-          result: 'error',
-          processed_packages: response.processedShipments,
-          response_status: response.response_code,
-          pdf: response.labels_pdf,
-          errors: response.errors,
-          msg: "Some errors during processing occured."
-          # Uncomment next line if you need more information about response errors.
-          #body: response
-        }
+        response
       end
     end
 
@@ -61,7 +42,6 @@ module OlzaApi
       header.merge(data)
     end
 
-    # Creates connection.
     def create_connection(url)
       Faraday.new(url: url) do |conn|
         conn.request :json
@@ -70,8 +50,9 @@ module OlzaApi
       end
     end
 
-    # Builds response from raw HTTP response.
     def build_response(raw_response, ignore_body = false)
+      raise HttpStatusError.new(raw_response, "Http status is #{raw_response.status}") if raw_response.status != 200
+
       if ignore_body
         Response.new(raw_response.status)
       else

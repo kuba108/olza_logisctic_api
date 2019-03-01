@@ -11,7 +11,7 @@ module OlzaApi
       @test_api = test_api
     end
 
-    # creates shipment in Olza system.
+    # Creates shipment in Olza system.
     def create_shipments(data)
       endpoint_url = "#{@api_url}/createShipments"
       payload = data
@@ -19,7 +19,7 @@ module OlzaApi
           send_post_request(endpoint_url, payload)
     end
 
-    # post shipments created in Olza system into spedition system
+    # Posts shipments created in Olza system into spedition system
     def post_shipments(data)
       endpoint_url = "#{@api_url}/postShipments"
       payload = data
@@ -27,7 +27,7 @@ module OlzaApi
           send_post_request(endpoint_url, payload)
     end
 
-    # returns shipment labels as pdf
+    # Returns shipment labels as pdf.
     def get_labels(data)
       endpoint_url = "#{@api_url}/getLabels"
       payload = data
@@ -35,7 +35,7 @@ module OlzaApi
           send_post_request(endpoint_url, payload)
     end
 
-    # returns statuses of actual packages
+    # Returns statuses of shipments.
     def get_statuses(data)
       endpoint_url = "#{@api_url}/getStatuses"
       payload = data
