@@ -7,11 +7,6 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="bundler (v2.0.1, rbenv: 2.4.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="faraday (v0.15.4, rbenv: 2.4.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="faraday_middleware (v0.12.2, rbenv: 2.4.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="minitest (v5.11.3, rbenv: 2.4.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="multipart-post (v2.0.0, rbenv: 2.4.3) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rake (v10.5.0, rbenv: 2.4.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rake (v10.5.0, rbenv: 1.9.3-p551) [gem]" level="application" />
   </component>
 </module>

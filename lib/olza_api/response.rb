@@ -4,9 +4,10 @@ require 'base64'
 module OlzaApi
   class Response
 
-    attr_reader :http_status
+    attr_reader :http_status, :body
 
     def initialize(http_status, body = nil)
+      @http_status = http_status
       @body = parse_body(body)
     end
 
@@ -48,7 +49,7 @@ module OlzaApi
     end
 
     def valid?
-      validator = ResponseValidator.new()
+      validator = ResponseValidator.new
       validator.validate_response(@body)
     end
 

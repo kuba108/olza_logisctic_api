@@ -1,15 +1,16 @@
 # OlzaApi
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/olza_api`. To experiment with that code, run `bin/console` for an interactive prompt.
+Connect your APP to spedition Olza system over API. 
 
-TODO: Delete this and the text above, and describe your gem
+Olza Logistic API client is a useful gem for developers who want to integrate basic API actions into their application. 
+It covers most of the needed possibilities.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'olza_api'
+gem 'olza_api', git: 'https://github.com/kuba108/olza_logistic_api.git'
 ```
 
 And then execute:
@@ -22,13 +23,15 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Central point in this gem is model Client which can create requests and handles its responses.
+Basic usage is to call methods in this order: 
 
-## Development
+* create_shipments - creates shipments in Olza panel (admin)
+* post_shipments - creates shipments on transporter system (GLS, PPL, etc.)
+* get_labels - returns PDF label in required format and encoded as Base64
+* get_statuses - returns information about shipments
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+More info will be written soon.
 
 ## Contributing
 

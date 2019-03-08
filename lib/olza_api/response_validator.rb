@@ -2,7 +2,6 @@ module OlzaApi
   class ResponseValidator
 
     def validate_response(response_body)
-
       unless response_body['status'].is_a?(Hash)
         raise ResponseError.new('Malformed status')
       end
@@ -32,7 +31,6 @@ module OlzaApi
       end
 
       true
-
     end
   end
 end

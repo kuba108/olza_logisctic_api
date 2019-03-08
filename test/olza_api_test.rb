@@ -121,8 +121,7 @@ class OlzaApiTest < Minitest::Test
       ]
     }
     client = OlzaApi::Client.new(test_login, test_pwd, test_url, test_language)
-    response = client.create(test_data)
-
+    response = client.create_shipments(test_data)
 
     assert_equal 1, response.error_list.size
     assert_instance_of OlzaApi::Response, response
@@ -153,7 +152,7 @@ class OlzaApiTest < Minitest::Test
     data = {payload: {shipmentList: [123456]}} #use real Shipment ID
 
     client = OlzaApi::Client.new(test_login, test_pwd, test_url, test_language)
-    response = client.post(data)
+    response = client.post_shipments(data)
 
     assert_instance_of Hash, response
   end
